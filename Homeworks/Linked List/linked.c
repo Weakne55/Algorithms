@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 typedef struct Node {
     int data;
@@ -15,27 +16,25 @@ typedef struct LinkedList{
 
 } LinkedList;
 
-void Showll(char* listofnames){}
+void Showll(char* listofnames){};
 
-void Choosell(char* namell, char* listofnames){}
+void Choosell(char* namell, char* listofnames){};
 
-void Createll(char* namell, char* listofnames){}
+void Createll(char* namell, char* listofnames){};
 
-void Deletell(LinkedList namell){}
+void Deletell(LinkedList namell){};
 
-void AddNode(LinkedList namell){}
+void AddNode(LinkedList namell){};
 
-void PopNode(Node node){}
+void PopNode(Node node){};
 
-void InsertNode(Node node, int position){}
+void InsertNode(Node node, int position){};
 
-void DeleteNode(Node node, int position){}
+void DeleteNode(Node node, int position){};
 
-void ShowData(LinkedList namell){}
+void ShowData(LinkedList namell){};
 
-void Check(LinkedList namell){
-
-}
+void Check(LinkedList namell){};
 
 void Help(){
     printf("All allowed commands:\n\
@@ -50,6 +49,46 @@ void Help(){
     Insert - insert node to specified position in chosen Linked List\n\
     Delete - delete node on specified position in chosen Linked List\n\
     Exit - leave the programm");
+};
+
+char *ListOfCommands[] = {"Show",
+    "Choose",
+    "Create",
+    "Clear",
+    "Check",
+    "Print",
+    "Add",
+    "Pop",
+    "Insert",
+    "Delete",
+    "Exit",
+    "Help",
+    NULL
+};
+
+
+void (*CommandFunctions[]) = {
+    Showll,
+    Choosell,
+    Createll,
+    Deletell,
+    Check,
+    ShowData,
+    AddNode,
+    PopNode,
+    InsertNode,
+    DeleteNode,
+    Help
+};
+
+void executeCommand(char *command){
+    for (int i = 0; ListOfCommands[i] != NULL; i++){
+        if (strcmp(command,ListOfCommands[i]) == 0){
+            CommandFunctions[i]();
+            return;
+        }
+    }   
+    printf("Sorry, there is no such command");
 }
 
 int main(int argc, char *argv[]){
@@ -62,25 +101,36 @@ int main(int argc, char *argv[]){
     // show ll: [LinkedList1, LinkedList2, ...]  or None if ll is empty
     // choose ll - assign input to var: chosenll, then check if chosenll in ll
     // 
-    char *ListOfCommands[] = {"Show", "Choose","Create","Clear","Check","Print","Add","Pop","Insert","Delete","Exit"};
-
+    
 
     char *command = NULL; // forces getline to allocate with malloc 
     size_t len = 0; 
-    ssize_t read;
-
-    printf ("\nHello, to get list of allowed commands print Help \n \
+    ssize_t nread;
+    
+    printf("\nHello, to get list of allowed commands print Help \n \
             print Exit or type [ctrl + c] to quit\n");
 
+    while (1){
+        nread = getline(&command, &len, stdin);
+    
+        if (nread == -1){
+            perror("Something went wrong, try later, bye \n");
+            break;
+        }
 
-    while ((read = getline(&command, &len, stdin)) != -1) {
+        if (command[nread-1] == '\n'){
+            command[nread-1] = '\0';
+        }
 
-        if (read > 0)
-            printf ("\nYou entered\n %s\n", command);
+        if (strcmp(command,"Exit") == 0) {
+            printf("Bye \n");    
+            break;
+        }
 
-        printf ("Enter string below [ctrl + c] to quit\n");
+        executeCommand(command);
+
+        //printf("Lets do: %s\n", command);
     }
-
     free (command);  /* free memory allocated by getline */
 
     return 0;
