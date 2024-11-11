@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 
@@ -15,13 +14,27 @@ typedef struct LinkedList{
 } LinkedList;
 
 Node* createNode(int data){
+    printf("New Node created\n");
     Node *newNode = (Node *)malloc(sizeof(Node));
+    if (newNode == NULL){
+        printf("Sorry, pointer is NULL\n");
+    } else {
+        printf("%p\n", newNode);
+    }
+    
     newNode->data = data;
     newNode->next = NULL;
     return newNode;
-}
+};
+
 void Create(LinkedList *list){
-    list->head=NULL;
+    if (list->head == NULL){
+        printf("Linked List already initialized\n");
+    }
+    else {
+        printf("Linked List created\n");
+        list->head=NULL;
+    }
 };
 
 void Clear(LinkedList *list){
@@ -38,13 +51,18 @@ void Clear(LinkedList *list){
 void AddNode(LinkedList *list,int data){
     Node *newNode = createNode(data);
     if (list->head == NULL){
-        list->head == newNode;
+        list->head = newNode;
+        printf("%p, newNode memory adress\n", newNode);
+        printf("We added new Node to head\n");
+        printf("%p, pointer of head\n",list->head);
     } else {
+        printf("We are going to add Node into the end\n");
         Node *current = list->head;
         while(current->next != NULL){
             current = current->next;
         }
         current->next = newNode;
+        printf("We added node to tail\n");
     }
 
 };
@@ -81,112 +99,22 @@ void ShowData(LinkedList *list){
     }
 };
 
-void Help(){
-    printf("All allowed commands:\n\
-    Create - create new empty Linked List\n\
-    Clear - delete linked list\n\
-    Print - print data in Linked List\n\
-    Add - add node to Linked List\n\
-    Pop - delete last node in Linked List\n\
-    Insert - insert node to specified position in Linked List\n\
-    Delete - delete node on specified position in Linked List\n\
-    Exit - leave the programm\n");
-};
-
 int main(int argc, char *argv[]){
-    char *command = NULL; 
-    size_t len = 0; 
-    ssize_t nread;
-    
-    LinkedList bogdan;
-    LinkedList *pbogdan = NULL;
-    //char *LastCommand = NULL;
 
-    printf("\nHello, to get list of allowed commands print Help \n \
-            print Exit or type [ctrl + c] to quit\n");
+    LinkedList list;
+    Create(&list);
+    Create(&list);
+    AddNode(&list,10);
+    //printf()
+    ShowData(&list);
 
-    while (1){
-      //  LastCommand = command;
-        printf("I`m waiting for your command\n");
-        nread = getline(&command, &len, stdin);
-
-        if (nread == -1){
-            perror("Something went wrong, try later, bye \n");
-            break;
-        }
-
-        if (command[nread-1] == '\n'){
-            command[nread-1] = '\0';
-        }
-
-        if (strcmp(command,"Exit") == 0) {
-            printf("Bye \n");    
-            break;
-        }
-        /*if (strcmp(LastCommand,"Add") == 0){
-            AddNode(&bogdan,(int*)*command);
-        };*/
-
-        if (strcmp(command,"Help") == 0){
-            Help();
-        } 
-        else if(strcmp(command,"Create") == 0){
-            if (pbogdan == &bogdan){
-                printf("Sorry,Linked List already created\n");
-            } else {
-                Create(&bogdan);
-                pbogdan = &bogdan;
-                printf("Linked List created\n"); 
-            }
-        }
-        else if(strcmp(command,"Clear") == 0){
-            if (pbogdan == NULL){
-                printf("Sorry,Linked List wasn`t created yet\n");
-            } else {
-                Clear(&bogdan);
-            } 
-        }
-        else if(strcmp(command,"Print") == 0){
-            if (pbogdan == NULL){
-                printf("Sorry,Linked List wasn`t created yet\n");
-            } else {
-                ShowData(&bogdan); 
-            } 
-        }
-        else if(strcmp(command,"Add") == 0){
-            if (pbogdan == NULL){
-                printf("Sorry,Linked List wasn`t created yet\n");
-            } else {
-                int data;
-                printf("Input int data\n");
-                if (scanf("%d", &data) != 1){
-                    printf("Sorry,wrong input,try again\n");
-                } else {
-                    fflush(stdin);
-                    AddNode(&bogdan,data); 
-                }
-           }
-        }
-        else if(strcmp(command,"Pop") == 0){
-            if (pbogdan == NULL){
-                printf("Sorry, Linked List wasn`t created yet\n");   
-            } else {
-                PopNode(&bogdan); 
-            }
-        }
-        /*else if(strcmp(command,"Insert")){
-            InsertNode(); 
-        }
-        else if(strcmp(command,"Delete")){
-            DeleteNode(); 
-        }*/
-        else {
-            printf("I don`t know such command, try again\n");
-        }
-
+    for (int i = 0; i == 5; ++i){
+        AddNode(&list, i);
     }
-    free (command);  
+    
+    ShowData(&list);
 
+ 
     return 0;
 
 }
