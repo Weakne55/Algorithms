@@ -6,113 +6,110 @@
 
 typedef struct Node {
     int data;
-    struct Node *next; //pointer to next node
+    struct Node *next; 
 } Node;
 
 
 typedef struct LinkedList{
-    // we need head
-    Node head;
-
+    Node *head;
 } LinkedList;
 
-void Showll(char* listofnames){};
+Node* createNode(int data){
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+void Create(LinkedList *list){
+    list->head=NULL;
+};
 
-void Choosell(char* namell, char* listofnames){};
+void Clear(LinkedList *list){
+    Node *current = list->head;
+    Node *nextNode;
+    while(current != NULL){
+        nextNode = current->next;
+        free(current);
+        current = nextNode;
+    }
+    list->head = NULL;
+};
 
-void Createll(char* namell, char* listofnames){};
+void AddNode(LinkedList *list,int data){
+    Node *newNode = createNode(data);
+    if (list->head == NULL){
+        list->head == newNode;
+    } else {
+        Node *current = list->head;
+        while(current->next != NULL){
+            current = current->next;
+        }
+        current->next = newNode;
+    }
 
-void Deletell(LinkedList namell){};
+};
 
-void AddNode(LinkedList namell){};
+void PopNode(LinkedList *list){
+    if (list->head == NULL){
+        printf("Sorry but linked list already empty\n");
+    } else {
+        Node *current = list->head;
+        Node *temp = NULL;
+        while (current != NULL){
+            temp = current;
+            current = current->next;
+        }
+        temp->next = NULL;
+        free(current);
+    }
 
-void PopNode(Node node){};
+};
 
-void InsertNode(Node node, int position){};
+//void InsertNode(Node node, int position){};
 
-void DeleteNode(Node node, int position){};
+//void DeleteNode(Node node, int position){};
 
-void ShowData(LinkedList namell){};
-
-void Check(LinkedList namell){};
+void ShowData(LinkedList *list){
+    if (list->head == NULL){
+        printf("Linked list is empty\n");
+    } else {
+        Node *current = list->head;
+        while(current != NULL){
+            printf("%d -> ",current->data);
+            current = current->next;
+        }
+    }
+};
 
 void Help(){
     printf("All allowed commands:\n\
-    Show - show all created Linked Lists\n\
-    Choose - choose Linked List you want work with\n\
     Create - create new empty Linked List\n\
-    Clear - delete chosen linked list\n\
-    Check - show chosen Linked List\n\
-    Print - print data in choden Linked List\n\
-    Add - add node to chosen Linked List\n\
-    Pop - delete last node in chosen Linked List\n\
-    Insert - insert node to specified position in chosen Linked List\n\
-    Delete - delete node on specified position in chosen Linked List\n\
-    Exit - leave the programm");
+    Clear - delete linked list\n\
+    Print - print data in Linked List\n\
+    Add - add node to Linked List\n\
+    Pop - delete last node in Linked List\n\
+    Insert - insert node to specified position in Linked List\n\
+    Delete - delete node on specified position in Linked List\n\
+    Exit - leave the programm\n");
 };
-
-char *ListOfCommands[] = {"Show",
-    "Choose",
-    "Create",
-    "Clear",
-    "Check",
-    "Print",
-    "Add",
-    "Pop",
-    "Insert",
-    "Delete",
-    "Exit",
-    "Help",
-    NULL
-};
-
-
-void (*CommandFunctions[]) = {
-    Showll,
-    Choosell,
-    Createll,
-    Deletell,
-    Check,
-    ShowData,
-    AddNode,
-    PopNode,
-    InsertNode,
-    DeleteNode,
-    Help
-};
-
-void executeCommand(char *command){
-    for (int i = 0; ListOfCommands[i] != NULL; i++){
-        if (strcmp(command,ListOfCommands[i]) == 0){
-            CommandFunctions[i]();
-            return;
-        }
-    }   
-    printf("Sorry, there is no such command");
-}
 
 int main(int argc, char *argv[]){
-    // While we dont get stop-word we can manipulate with LinkedList, we need var:command
-    // infinite input: while command is not 'exit' and if input not in list of commands, then print(Sorry,idk what do you want)
-    // else: run command (function)
-    // List of commands: ['show ll','choose ll','create ll','delete ll','add node'(assumed add data to chosen before node),
-    // 'pop node'(assumed to pop node in chosen ll),'show data'(show all nodes in chosen ll:data1->data2->data3)]
-    // So we need comand to make linked-list and we should can several linked list at one program
-    // show ll: [LinkedList1, LinkedList2, ...]  or None if ll is empty
-    // choose ll - assign input to var: chosenll, then check if chosenll in ll
-    // 
-    
-
-    char *command = NULL; // forces getline to allocate with malloc 
+    char *command = NULL; 
     size_t len = 0; 
     ssize_t nread;
     
+    LinkedList bogdan;
+    LinkedList *pbogdan = NULL;
+    //char *LastCommand = NULL;
+
     printf("\nHello, to get list of allowed commands print Help \n \
             print Exit or type [ctrl + c] to quit\n");
 
     while (1){
+      //  LastCommand = command;
+        printf("I`m waiting for your command\n");
         nread = getline(&command, &len, stdin);
-    
+
         if (nread == -1){
             perror("Something went wrong, try later, bye \n");
             break;
@@ -126,12 +123,69 @@ int main(int argc, char *argv[]){
             printf("Bye \n");    
             break;
         }
+        /*if (strcmp(LastCommand,"Add") == 0){
+            AddNode(&bogdan,(int*)*command);
+        };*/
 
-        executeCommand(command);
+        if (strcmp(command,"Help") == 0){
+            Help();
+        } 
+        else if(strcmp(command,"Create") == 0){
+            if (pbogdan == &bogdan){
+                printf("Sorry,Linked List already created\n");
+            } else {
+                Create(&bogdan);
+                pbogdan = &bogdan;
+                printf("Linked List created\n"); 
+            }
+        }
+        else if(strcmp(command,"Clear") == 0){
+            if (pbogdan == NULL){
+                printf("Sorry,Linked List wasn`t created yet\n");
+            } else {
+                Clear(&bogdan);
+            } 
+        }
+        else if(strcmp(command,"Print") == 0){
+            if (pbogdan == NULL){
+                printf("Sorry,Linked List wasn`t created yet\n");
+            } else {
+                ShowData(&bogdan); 
+            } 
+        }
+        else if(strcmp(command,"Add") == 0){
+            if (pbogdan == NULL){
+                printf("Sorry,Linked List wasn`t created yet\n");
+            } else {
+                int data;
+                printf("Input int data\n");
+                if (scanf("%d", &data) != 1){
+                    printf("Sorry,wrong input,try again\n");
+                } else {
+                    fflush(stdin);
+                    AddNode(&bogdan,data); 
+                }
+           }
+        }
+        else if(strcmp(command,"Pop") == 0){
+            if (pbogdan == NULL){
+                printf("Sorry, Linked List wasn`t created yet\n");   
+            } else {
+                PopNode(&bogdan); 
+            }
+        }
+        /*else if(strcmp(command,"Insert")){
+            InsertNode(); 
+        }
+        else if(strcmp(command,"Delete")){
+            DeleteNode(); 
+        }*/
+        else {
+            printf("I don`t know such command, try again\n");
+        }
 
-        //printf("Lets do: %s\n", command);
     }
-    free (command);  /* free memory allocated by getline */
+    free (command);  
 
     return 0;
 
