@@ -14,13 +14,13 @@ typedef struct LinkedList{
 } LinkedList;
 
 Node* createNode(int data){
-    printf("New Node created\n");
+    //printf("New Node created\n");
     Node *newNode = (Node *)malloc(sizeof(Node));
-    if (newNode == NULL){
+    /*if (newNode == NULL){
         printf("Sorry, pointer is NULL\n");
     } else {
         printf("%p\n", newNode);
-    }
+    }*/
     
     newNode->data = data;
     newNode->next = NULL;
@@ -52,17 +52,17 @@ void AddNode(LinkedList *list,int data){
     Node *newNode = createNode(data);
     if (list->head == NULL){
         list->head = newNode;
-        printf("%p, newNode memory adress\n", newNode);
-        printf("We added new Node to head\n");
-        printf("%p, pointer of head\n",list->head);
+        //printf("%p, newNode memory adress\n", newNode);
+        //printf("We added new Node to head\n");
+        //printf("%p, pointer of head\n",list->head);
     } else {
-        printf("We are going to add Node into the end\n");
+        //printf("We are going to add Node into the end\n");
         Node *current = list->head;
         while(current->next != NULL){
             current = current->next;
         }
         current->next = newNode;
-        printf("We added node to tail\n");
+        //printf("We added node to tail\n");
     }
 
 };
@@ -73,10 +73,11 @@ void PopNode(LinkedList *list){
     } else {
         Node *current = list->head;
         Node *temp = NULL;
-        while (current != NULL){
+        while (current->next != NULL){
             temp = current;
             current = current->next;
-        }
+        };
+        //printf("%d %p\n",temp->data, current);
         temp->next = NULL;
         free(current);
     }
@@ -95,7 +96,9 @@ void ShowData(LinkedList *list){
         while(current != NULL){
             printf("%d -> ",current->data);
             current = current->next;
-        }
+        };
+        printf("\n");
+
     }
 };
 
@@ -103,17 +106,20 @@ int main(int argc, char *argv[]){
 
     LinkedList list;
     Create(&list);
-    Create(&list);
+    //Create(&list);
     AddNode(&list,10);
     //printf()
-    ShowData(&list);
+    //ShowData(&list);
 
-    for (int i = 0; i == 5; ++i){
+    for (int i = 0; i<=5; ++i){
         AddNode(&list, i);
     }
     
     ShowData(&list);
-
+    PopNode(&list);
+    ShowData(&list);
+    Clear(&list);
+    ShowData(&list);
  
     return 0;
 
