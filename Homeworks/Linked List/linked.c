@@ -84,7 +84,19 @@ void PopNode(LinkedList *list){
 
 };
 
-//void InsertNode(Node node, int position){};
+void InsertNode(LinkedList *list, int data, int position){
+    int k = 1;
+    if (list->head == NULL){
+        printf("Linked List is empty");
+    };
+    else{
+        Node *current = list->head;
+        while(current != NULL){
+            ++k;
+            
+        };
+    }
+};
 
 //void DeleteNode(Node node, int position){};
 
