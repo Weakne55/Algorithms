@@ -78,6 +78,7 @@ void PopNode(LinkedList *list){
             current = current->next;
         };
         //printf("%d %p\n",temp->data, current);
+        printf("%d\n",current->data);
         temp->next = NULL;
         free(current);
     }
@@ -88,7 +89,7 @@ void InsertNode(LinkedList *list, int data, int position){
     int k = 1;
     if (list->head == NULL){
         printf("Linked List is empty");
-    };
+    }
     else{
         Node *current = list->head;
         while(current != NULL){
@@ -98,7 +99,21 @@ void InsertNode(LinkedList *list, int data, int position){
     }
 };
 
-//void DeleteNode(Node node, int position){};
+void DeleteNode(LinkedList *list, int position){
+    int i = 0;
+    Node *current = list->head;
+    Node *tmp = NULL;
+    if (list->head == NULL){
+        printf("Sorry but linked list already empty\n");
+    } else {
+        if (position == 1){
+            PopNode(list);
+        }
+        else{
+            
+        }
+ 
+};
 
 void ShowData(LinkedList *list){
     if (list->head == NULL){
