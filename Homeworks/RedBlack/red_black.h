@@ -18,8 +18,8 @@ Node* createNode(const int v, const bool c, Node* l, Node* r, Node* p);
 
 typedef struct RBTree
 {
-    Node* nil;// = createNode(-1, BLACK, NULL, NULL, NULL);
-    Node* root;// = nil;
+    Node* nil;
+    Node* root;
 } RBTree;
 
 void leftRotate(RBTree* tree, Node* x);

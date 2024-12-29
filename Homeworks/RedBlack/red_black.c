@@ -14,7 +14,6 @@ Node* createNode(const int v, const bool c, Node* l, Node* r, Node* p)
 void leftRotate(RBTree* tree, Node* x)
 {
     Node* nil = tree->nil;
-    Node* root = tree->root;
 
     Node* y = x->right;
     x->right = y->left;
@@ -22,7 +21,7 @@ void leftRotate(RBTree* tree, Node* x)
         y->left->parent = x;
     y->parent = x->parent;
     if (x->parent == nil)
-        root = y;
+        tree->root = y;
     else if (x->parent->left == x)
         x->parent->left = y;
     else
@@ -34,7 +33,6 @@ void leftRotate(RBTree* tree, Node* x)
 void rightRotate(RBTree* tree, Node* x)
 {
     Node* nil = tree->nil;
-    Node* root = tree->root;
 
     Node* y = x->left;
     x->left = y->right;
@@ -42,7 +40,7 @@ void rightRotate(RBTree* tree, Node* x)
         y->right->parent = x;
     y->parent = x->parent;
     if (x->parent == nil)
-        root = y;
+        tree->root = y;
     else if (x->parent->left == x)
         x->parent->left = y;
     else
@@ -54,12 +52,11 @@ void rightRotate(RBTree* tree, Node* x)
 Node* insertBST(RBTree* tree, Node* p, Node* r, const int v)
 {
     Node* nil = tree->nil;
-    Node* root = tree->root;
 
     if (r == nil) {
         r = createNode(v, RED, nil, nil, p);
         if (p == nil)
-            root = r;
+            tree->root = r;
         if (v > p->val)
             p->right = r;
         else
@@ -76,9 +73,8 @@ Node* insertBST(RBTree* tree, Node* p, Node* r, const int v)
 void insert(RBTree* tree, const int v)
 {
     Node* nil = tree->nil;
-    Node* root = tree->root;
 
-    Node* z = insertBST(tree, nil, root, v);
+    Node* z = insertBST(tree, nil, tree->root, v);
     while (z->parent->color == RED) {
         if (z->parent->parent->left == z->parent) {
             if (z->parent->parent->right->color == RED) {
@@ -112,14 +108,12 @@ void insert(RBTree* tree, const int v)
             }
         }
     }
-    root->color = BLACK;
+    tree->root->color = BLACK;
 }
 
 Node* findMin(RBTree* tree, Node* r)
 {
     Node* nil = tree->nil;
-    Node* root = tree->root;
-
     Node* p = r;
     while (r != nil) {
         p = r;
@@ -131,8 +125,6 @@ Node* findMin(RBTree* tree, Node* r)
 Node* getNode(RBTree* tree, Node* r, const int v)
 {
     Node* nil = tree->nil;
-    Node* root = tree->root;
-
     if (r == nil)
         return nil;
     if (r->val == v)
